@@ -1,0 +1,1 @@
+# CompPar-Lab-Explorando-OpenMP
