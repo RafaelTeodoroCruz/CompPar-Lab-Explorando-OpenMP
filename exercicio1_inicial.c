@@ -1,9 +1,8 @@
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <omp.h>
 
-// Regra do trapezio - versao inicial com OpenMP
+// Rafael Teodoro Cruz - RA: 10723258
+// Exercicio 1 - Versao 1: Regra do trapezio sequencial
 
 double f(double x) {
     return x * x;
@@ -13,30 +12,18 @@ int main() {
     double a = 0.0;
     double b = 1.0;
     int n = 1000000;
-    int threads = 4;
 
     double h = (b - a) / n;
-    double soma = 0.0;
+    double aprox = (f(a) + f(b)) / 2.0;
 
-    #pragma omp parallel num_threads(threads)
-    {
-        int id = omp_get_thread_num();
-        int total = omp_get_num_threads();
-
-        double parcial = 0.0;
-
-        for (int i = id + 1; i < n; i += total) {
-            double x = a + i * h;
-            parcial += f(x);
-        }
-
-        #pragma omp critical
-        soma += parcial;
+    for (int i = 1; i < n; i++) {
+        double x = a + i * h;
+        aprox += f(x);
     }
 
-    double integral = h * ((f(a) + f(b)) / 2.0 + soma);
+    aprox *= h;
 
-    printf("Integral aproximada: %.10f\n", integral);
+    printf("Integral aproximada: %.10f\n", aprox);
 
     return 0;
 }
